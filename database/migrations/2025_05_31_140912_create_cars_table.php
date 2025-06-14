@@ -21,7 +21,6 @@ return new class extends Migration
             $table->enum('availability_status', ['available', 'rented', 'maintenance'])->default('available');
             $table->string('image_url')->nullable();
             $table->text('description')->nullable();
-            $table->string('license_plate')->unique();
             $table->integer('capacity');
             $table->string('fuel_type');
             $table->timestamps();

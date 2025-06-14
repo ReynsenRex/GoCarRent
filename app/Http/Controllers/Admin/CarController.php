@@ -4,62 +4,127 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Models\Car;
+use Illuminate\Support\Facades\Storage;
 
 class CarController extends Controller
 {
     /**
-     * Display a listing of the resource.
-     */
-    public function index()
-    {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
+     * Tampilkan form tambah mobil.
      */
     public function create()
     {
-        //
+        return view('admin.create');
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Simpan data mobil baru.
      */
     public function store(Request $request)
     {
-        //
+        $validated = $request->validate([
+            'brand' => 'required|string|max:255',
+            'model' => 'required|string|max:255',
+            'year' => 'required|integer|min:1900|max:' . (date('Y') + 1),
+            'transmission' => 'required|in:manual,automatic',
+            'price_per_day' => 'required|numeric|min:0',
+            'availability_status' => 'required|in:available,rented,maintenance',
+            'image_url' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+            'description' => 'nullable|string',
+            'capacity' => 'required|integer|min:1',
+            'fuel_type' => 'required|string|max:50',
+        ]);
+
+
+        // Upload gambar
+        if ($request->hasFile('image_url')) {
+            $path = $request->file('image_url')->store('cars', 'public');
+            $validated['image_url'] = $path;
+        }
+
+        Car::create($validated);
+
+        return redirect()->route('admin.dashboard')->with('success', 'Car successfully added!');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
+    public function index(Request $request)
     {
-        //
+        $query = Car::query();
+
+        // Search by brand, model, or year
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function ($q) use ($search) {
+                $q->where('brand', 'ILIKE', "%{$search}%")
+                    ->orWhere('model', 'ILIKE', "%{$search}%")
+                    ->orWhere('year', 'LIKE', "%{$search}%");
+            });
+        }
+
+        // Filter by availability_status
+        if ($request->filled('status')) {
+            $query->where('availability_status', $request->status);
+        }
+
+        $cars = $query->latest()->paginate(10)->withQueryString();
+
+        return view('admin.index', compact('cars'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
+
+    public function edit($id)
     {
-        //
+        $car = Car::findOrFail($id);
+        return view('admin.edit', compact('car'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
+    public function update(Request $request, $id)
     {
-        //
+        $request->validate([
+            'brand' => 'required|string|max:255',
+            'model' => 'required|string|max:255',
+            'year' => 'required|integer',
+            'transmission' => 'required|in:automatic,manual',
+            'price_per_day' => 'required|numeric',
+            'availability_status' => 'required|in:available,rented,maintenance',
+            'image_url' => 'nullable|image|max:2048',
+        ]);
+
+        $car = Car::findOrFail($id);
+
+        // Handle file upload
+        if ($request->hasFile('image_url')) {
+            if ($car->image_url && Storage::disk('public')->exists($car->image_url)) {
+                Storage::disk('public')->delete($car->image_url);
+            }
+
+            $imagePath = $request->file('image_url')->store('cars', 'public');
+            $car->image_url = $imagePath;
+        }
+
+        $car->update([
+            'brand' => $request->brand,
+            'model' => $request->model,
+            'year' => $request->year,
+            'transmission' => $request->transmission,
+            'price_per_day' => $request->price_per_day,
+            'availability_status' => $request->availability_status,
+        ]);
+
+        return redirect()->route('admin.index')->with('success', 'Data mobil berhasil diperbarui.');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
+    public function destroy($id)
     {
-        //
+        $car = Car::findOrFail($id);
+
+        // Hapus gambar jika ada
+        if ($car->image_url && Storage::disk('public')->exists($car->image_url)) {
+            Storage::disk('public')->delete($car->image_url);
+        }
+
+        $car->delete();
+
+        return redirect()->route('admin.index')->with('success', 'Mobil berhasil dihapus.');
     }
 }

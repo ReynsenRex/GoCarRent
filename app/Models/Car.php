@@ -18,7 +18,6 @@ class Car extends Model
         'availability_status',
         'image_url',
         'description',
-        'license_plate',
         'capacity',
         'fuel_type',
     ];

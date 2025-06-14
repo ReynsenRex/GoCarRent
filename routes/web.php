@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\CarController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
@@ -42,6 +43,16 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
         return view('admin.dashboard');
     })->name('dashboard');
 });
+
+// Admin CRUD Car
+Route::get('/admin/create', [CarController::class, 'create'])->name('admin.create');;
+Route::post('/admin/store', [CarController::class, 'store'])->name('admin.store');
+Route::get('/admin/manage', [CarController::class, 'index'])->name('admin.index');
+Route::get('/admin/edit/{id}', [CarController::class, 'edit'])->name('admin.edit');
+Route::delete('/admin/destroy/{id}', [CarController::class, 'destroy'])->name('admin.destroy');
+Route::put('/cars/{car}', [CarController::class, 'update'])->name('cars.update');
+
+
 
 // Customer routes
 Route::middleware(['auth', 'customer'])->prefix('customer')->name('customer.')->group(function () {
