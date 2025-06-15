@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\CarController;
+use App\Http\Controllers\Admin\BookingController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
@@ -52,6 +53,28 @@ Route::get('/admin/edit/{id}', [CarController::class, 'edit'])->name('admin.edit
 Route::delete('/admin/destroy/{id}', [CarController::class, 'destroy'])->name('admin.destroy');
 Route::put('/cars/{car}', [CarController::class, 'update'])->name('cars.update');
 
+Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(function () {
+    // Standard resource routes
+    Route::resource('bookings', BookingController::class);
+
+    Route::get('/bookings', [BookingController::class, 'index'])->name('bookings.index');
+    
+    // Additional booking management routes
+    Route::patch('bookings/{booking}/approve', [BookingController::class, 'approve'])
+        ->name('bookings.approve');
+        
+    Route::patch('bookings/{booking}/reject', [BookingController::class, 'reject'])
+        ->name('bookings.reject');
+        
+    Route::patch('bookings/{booking}/complete', [BookingController::class, 'complete'])
+        ->name('bookings.complete');
+        
+    Route::patch('bookings/{booking}/cancel', [BookingController::class, 'cancel'])
+        ->name('bookings.cancel');
+        
+    // Statistics route
+    Route::get('/statistics', [BookingController::class, 'statistics'])->name('statistics');
+});
 
 
 // Customer routes
