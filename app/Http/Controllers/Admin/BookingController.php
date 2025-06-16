@@ -278,6 +278,17 @@ class BookingController extends Controller
                 ->whereRaw('EXTRACT(YEAR FROM created_at) = ?', [date('Y')])
                 ->groupBy(DB::raw('EXTRACT(MONTH FROM created_at)'))
                 ->pluck('count', 'month');
+            
+            $topCars = Booking::select('car_id', DB::raw('COUNT(*) as total_bookings'))
+                ->whereNotNull('car_id')
+                ->groupBy('car_id')
+                ->orderByDesc('total_bookings')
+                ->first();
+
+            $monthlyIncomeBookings = Booking::selectRaw('EXTRACT(MONTH FROM created_at) as month, SUM(total_price) as total_revenue')
+                ->whereRaw('EXTRACT(YEAR FROM created_at) = ?', [date('Y')])
+                ->groupBy(DB::raw('EXTRACT(MONTH FROM created_at)'))
+                ->pluck('total_revenue', 'month');
         } else {
             // MySQL syntax (default)
             $monthlyBookings = Booking::selectRaw('MONTH(created_at) as month, COUNT(*) as count')
@@ -295,6 +306,8 @@ class BookingController extends Controller
             'cancelled_bookings' => Booking::where('status', 'cancelled')->count(),
             'total_revenue' => Booking::where('status', 'completed')->sum('total_price'),
             'monthly_bookings' => $monthlyBookings,
+            'top_car' => Car::find($topCars->car_id),
+            'monthly_income_bookings' => $monthlyIncomeBookings,
         ];
 
         // Get recent bookings for display (use paginate for links method)

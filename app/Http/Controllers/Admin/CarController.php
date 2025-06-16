@@ -38,7 +38,7 @@ class CarController extends Controller
 
         // Upload gambar
         if ($request->hasFile('image_url')) {
-            $path = $request->file('image_url')->store('cars', 'public');
+            $path = $request->file('image_url')->storeAs('cars', $request->file('image_url')->getClientOriginalName(), 'public');
             $validated['image_url'] = $path;
         }
 
