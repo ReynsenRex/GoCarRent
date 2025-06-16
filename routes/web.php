@@ -77,11 +77,28 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(fun
 });
 
 
-// Customer routes
-Route::middleware(['auth', 'customer'])->prefix('customer')->name('customer.')->group(function () {
+// Customer Routes
+Route::middleware(['auth'])->prefix('customer')->name('customer.')->group(function () {
+    // Add customer dashboard route
     Route::get('/dashboard', function () {
         return view('customer.dashboard');
     })->name('dashboard');
+    
+    // Car browsing and booking
+    Route::get('/cars', [App\Http\Controllers\Customer\CarController::class, 'index'])->name('cars.index');
+    Route::get('/cars/{car}', [App\Http\Controllers\Customer\CarController::class, 'show'])->name('cars.show');
+    Route::post('/cars/calculate-price', [App\Http\Controllers\Customer\CarController::class, 'calculatePrice'])->name('cars.calculate-price');
+    
+    // Bookings
+    Route::get('/bookings', [App\Http\Controllers\Customer\BookingController::class, 'index'])->name('bookings.index');
+    Route::post('/bookings', [App\Http\Controllers\Customer\BookingController::class, 'store'])->name('bookings.store');
+    Route::get('/bookings/{booking}', [App\Http\Controllers\Customer\BookingController::class, 'show'])->name('bookings.show');
+    Route::patch('/bookings/{booking}/cancel', [App\Http\Controllers\Customer\BookingController::class, 'cancel'])->name('bookings.cancel');
+    
+    // Payments
+    Route::get('/bookings/{booking}/payment', [App\Http\Controllers\Customer\PaymentController::class, 'create'])->name('payments.create');
+    Route::post('/bookings/{booking}/payment', [App\Http\Controllers\Customer\PaymentController::class, 'store'])->name('payments.store');
+    Route::get('/bookings/{booking}/payment/details', [App\Http\Controllers\Customer\PaymentController::class, 'show'])->name('payments.show');
 });
 
 // Staff routes
