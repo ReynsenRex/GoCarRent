@@ -4,11 +4,14 @@ use App\Http\Controllers\Admin\CarController;
 use App\Http\Controllers\Admin\BookingController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Customer\CarController as CustomerCarController;
 
 // Home route with name
 Route::get('/', function () {
     return view('home');
 })->name('home');
+
+Route::get('/', [CustomerCarController::class, 'showPopularCars'])->name('home');
 
 // Main dashboard route - redirects based on user role
 Route::middleware('auth')->get('/dashboard', function () {
@@ -88,7 +91,7 @@ Route::middleware(['auth'])->prefix('customer')->name('customer.')->group(functi
     Route::get('/cars', [App\Http\Controllers\Customer\CarController::class, 'index'])->name('cars.index');
     Route::get('/cars/{car}', [App\Http\Controllers\Customer\CarController::class, 'show'])->name('cars.show');
     Route::post('/cars/calculate-price', [App\Http\Controllers\Customer\CarController::class, 'calculatePrice'])->name('cars.calculate-price');
-    
+
     // Bookings
     Route::get('/bookings', [App\Http\Controllers\Customer\BookingController::class, 'index'])->name('bookings.index');
     Route::post('/bookings', [App\Http\Controllers\Customer\BookingController::class, 'store'])->name('bookings.store');

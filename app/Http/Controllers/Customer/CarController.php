@@ -25,9 +25,16 @@ class CarController extends Controller
     public function index(Request $request)
     {
         $filters = $request->only([
-            'location', 'transmission', 'fuel_type', 'capacity',
-            'min_price', 'max_price', 'brand', 'search',
-            'start_date', 'end_date'
+            'location',
+            'transmission',
+            'fuel_type',
+            'capacity',
+            'min_price',
+            'max_price',
+            'brand',
+            'search',
+            'start_date',
+            'end_date'
         ]);
 
         // If date range is provided, get available cars
@@ -58,13 +65,13 @@ class CarController extends Controller
     public function show($id, Request $request)
     {
         $car = Car::findOrFail($id);
-        
+
         // Get availability calendar for next 90 days
         $availabilityCalendar = $this->availabilityService->getAvailabilityCalendar($car->id);
-        
+
         // Get booked dates for JavaScript
         $bookedDates = $this->availabilityService->getBookedDates($car->id);
-        
+
         // Calculate price if dates provided
         $priceCalculation = null;
         if ($request->filled('start_date') && $request->filled('end_date')) {
@@ -78,6 +85,13 @@ class CarController extends Controller
         return view('customer.cars.show', compact('car', 'availabilityCalendar', 'bookedDates', 'priceCalculation'));
     }
 
+    public function showPopularCars()
+    {
+        // Ambil semua mobil yang tersedia
+        $cars = Car::where('availability_status', 'available')->get();
+
+        return view('home', compact('cars')); // Ganti 'home' sesuai blade-mu
+    }
     /**
      * AJAX endpoint for price calculation
      */
