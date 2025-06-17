@@ -6,6 +6,7 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Customer\CarController as CustomerCarController;
 use App\Http\Controllers\Admin\PromoController;
+use App\Http\Controllers\Admin\DashboardController;
 
 Route::prefix('admin')->middleware(['auth', 'is_admin'])->group(function () {
     Route::get('/promos/create', [PromoController::class, 'create'])->name('admin.create');
@@ -49,9 +50,7 @@ Route::middleware('auth')->get('/dashboard', function () {
 
 // Admin routes
 Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
-    Route::get('/dashboard', function () {
-        return view('admin.dashboard');
-    })->name('dashboard');
+    Route::get('/dashboard', [DashboardController::class, 'dashboard'])->name('dashboard');
 });
 
 // Admin CRUD Car
