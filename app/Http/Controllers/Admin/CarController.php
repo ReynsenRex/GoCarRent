@@ -86,6 +86,7 @@ class CarController extends Controller
             'year' => 'required|integer',
             'transmission' => 'required|in:automatic,manual',
             'price_per_day' => 'required|numeric',
+            'capacity' => 'required|integer|min:1',
             'availability_status' => 'required|in:available,rented,maintenance',
             'image_url' => 'nullable|image|max:2048',
         ]);
@@ -109,6 +110,7 @@ class CarController extends Controller
             'transmission' => $request->transmission,
             'price_per_day' => $request->price_per_day,
             'availability_status' => $request->availability_status,
+            'capacity' => $request->capacity,
         ]);
 
         return redirect()->route('admin.index')->with('success', 'Data mobil berhasil diperbarui.');

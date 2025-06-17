@@ -96,6 +96,22 @@
                                     placeholder="2020" required>
                             </div>
 
+                    
+                            <div class="group">
+                                <label class="block text-sm font-semibold text-gray-200 mb-2 flex items-center">
+                                    <svg class="w-4 h-4 mr-2 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
+                                    </svg>
+                                    Capacity
+                                </label>
+                                <input type="number" name="capacity" min="1" max="20"
+                                    value="{{ old('capacity', $car->capacity) }}"
+                                    class="w-full px-4 py-3 border border-gray-700 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 bg-gray-900 text-gray-100 focus:bg-gray-800 group-hover:border-blue-400"
+                                    placeholder="Number of passengers" required>
+                            </div>
+
+                    
+
                             <!-- Transmission -->
                             <div class="group">
                                 <label class="block text-sm font-semibold text-gray-200 mb-2 flex items-center">
@@ -130,7 +146,7 @@
                                         placeholder="300000" required>
                                 </div>
                                 <p class="text-xs text-gray-400 mt-1">💡 Enter the price in Rupiah without dots or commas</p>
-                            </div>
+                            </div>  
 
                             <!-- Availability Status -->
                             <div class="group">
@@ -148,6 +164,7 @@
                                 </select>
                             </div>
 
+                            
                             <!-- Image Upload -->
                             <div class="group">
                                 <label class="block text-sm font-semibold text-gray-200 mb-2 flex items-center">
@@ -201,6 +218,7 @@
                     </div>
                 </form>
             </div>
+            
 
             <!-- Additional Info Card -->
             <div class="mt-8 bg-gradient-to-r from-gray-800 to-gray-900 border border-blue-900 rounded-xl p-6">
