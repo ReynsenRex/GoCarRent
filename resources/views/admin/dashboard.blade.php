@@ -12,6 +12,11 @@
                     + Add New Car
                 </a>
 
+                <a href="{{ route('admin.promos.create') }}"
+   class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium transition duration-200">
+    + Add New Promo
+</a>
+
                 <a href="{{ route('admin.statistics') }}"
                     class="bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded-lg font-medium transition duration-200">
                     Laporan

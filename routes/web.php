@@ -5,6 +5,12 @@ use App\Http\Controllers\Admin\BookingController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Customer\CarController as CustomerCarController;
+use App\Http\Controllers\Admin\PromoController;
+
+Route::prefix('admin')->middleware(['auth', 'is_admin'])->group(function () {
+    Route::get('/promos/create', [PromoController::class, 'create'])->name('admin.create');
+    Route::post('/promos', [PromoController::class, 'store'])->name('admin.store');
+});
 
 // Home route with name
 Route::get('/', function () {
@@ -56,6 +62,12 @@ Route::get('/admin/edit/{id}', [CarController::class, 'edit'])->name('admin.edit
 Route::delete('/admin/destroy/{id}', [CarController::class, 'destroy'])->name('admin.destroy');
 Route::put('/cars/{car}', [CarController::class, 'update'])->name('cars.update');
 
+// Admin CRUD promo
+// Tampilkan form tambah promo
+Route::get('/admin/promos/create', [PromoController::class, 'create'])->name('admin.promos.create');
+// Simpan promo baru
+Route::post('/admin/promos', [PromoController::class, 'store'])->name('admin.promos.store');
+
 Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(function () {
     // Standard resource routes
     Route::resource('bookings', BookingController::class);
@@ -74,7 +86,8 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(fun
         
     Route::patch('bookings/{booking}/cancel', [BookingController::class, 'cancel'])
         ->name('bookings.cancel');
-        
+
+    
     // Statistics route
     Route::get('/statistics', [BookingController::class, 'statistics'])->name('statistics');
 });
