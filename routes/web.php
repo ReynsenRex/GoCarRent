@@ -22,15 +22,15 @@ Route::get('/', [CustomerCarController::class, 'showPopularCars'])->name('home')
 // Main dashboard route - redirects based on user role
 Route::middleware('auth')->get('/dashboard', function () {
     $user = auth()->user();
-    
+
     // Debug: Let's see what's happening
     if (!$user) {
         return redirect()->route('login')->with('error', 'Please log in first');
     }
-    
+
     // Load the role relationship
     $user->load('role');
-    
+
     if ($user->isAdmin()) {
         return redirect()->route('admin.dashboard');
     } elseif ($user->isCustomer()) {
@@ -38,7 +38,7 @@ Route::middleware('auth')->get('/dashboard', function () {
     } elseif ($user->isStaff()) {
         return redirect()->route('staff.dashboard');
     }
-    
+
     // Debug fallback
     return response()->json([
         'user' => $user->name,
@@ -67,27 +67,32 @@ Route::put('/cars/{car}', [CarController::class, 'update'])->name('cars.update')
 Route::get('/admin/promos/create', [PromoController::class, 'create'])->name('admin.promos.create');
 // Simpan promo baru
 Route::post('/admin/promos', [PromoController::class, 'store'])->name('admin.promos.store');
+Route::post('/promos', [PromoController::class, 'store'])->name('admin.promos.store');
+Route::get('/promos/{promo}/edit', [PromoController::class, 'edit'])->name('admin.promos.edit');
+Route::put('/promos/{promo}', [PromoController::class, 'update'])->name('admin.promos.update');
+Route::delete('/promos/{promo}', [PromoController::class, 'destroy'])->name('admin.promos.destroy');
+
 
 Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(function () {
     // Standard resource routes
     Route::resource('bookings', BookingController::class);
 
     Route::get('/bookings', [BookingController::class, 'index'])->name('bookings.index');
-    
+
     // Additional booking management routes
     Route::patch('bookings/{booking}/approve', [BookingController::class, 'approve'])
         ->name('bookings.approve');
-        
+
     Route::patch('bookings/{booking}/reject', [BookingController::class, 'reject'])
         ->name('bookings.reject');
-        
+
     Route::patch('bookings/{booking}/complete', [BookingController::class, 'complete'])
         ->name('bookings.complete');
-        
+
     Route::patch('bookings/{booking}/cancel', [BookingController::class, 'cancel'])
         ->name('bookings.cancel');
 
-    
+
     // Statistics route
     Route::get('/statistics', [BookingController::class, 'statistics'])->name('statistics');
 });
@@ -99,7 +104,7 @@ Route::middleware(['auth'])->prefix('customer')->name('customer.')->group(functi
     Route::get('/dashboard', function () {
         return view('customer.dashboard');
     })->name('dashboard');
-    
+
     // Car browsing and booking
     Route::get('/cars', [App\Http\Controllers\Customer\CarController::class, 'index'])->name('cars.index');
     Route::get('/cars/{car}', [App\Http\Controllers\Customer\CarController::class, 'show'])->name('cars.show');
@@ -110,7 +115,7 @@ Route::middleware(['auth'])->prefix('customer')->name('customer.')->group(functi
     Route::post('/bookings', [App\Http\Controllers\Customer\BookingController::class, 'store'])->name('bookings.store');
     Route::get('/bookings/{booking}', [App\Http\Controllers\Customer\BookingController::class, 'show'])->name('bookings.show');
     Route::patch('/bookings/{booking}/cancel', [App\Http\Controllers\Customer\BookingController::class, 'cancel'])->name('bookings.cancel');
-    
+
     // Payments
     Route::get('/bookings/{booking}/payment', [App\Http\Controllers\Customer\PaymentController::class, 'create'])->name('payments.create');
     Route::post('/bookings/{booking}/payment', [App\Http\Controllers\Customer\PaymentController::class, 'store'])->name('payments.store');
@@ -153,4 +158,4 @@ Route::get('/test-auth', function () {
     }
 });
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';
