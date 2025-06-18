@@ -29,7 +29,7 @@ class PromoController extends Controller
 
         Promo::create($validated);
 
-        return redirect()->back()->with('success', 'Promo berhasil ditambahkan!');
+        return redirect()->route('admin.dashboard')->with('success', 'Promo berhasil ditambahkan!');
     }
     /**
      * Display the specified resource.

@@ -7,6 +7,8 @@ use App\Models\Car;
 use App\Services\CarSearchService;
 use App\Services\CarAvailabilityService;
 use Illuminate\Http\Request;
+use App\Models\Promo;
+use Carbon\Carbon;
 
 class CarController extends Controller
 {
@@ -82,7 +84,10 @@ class CarController extends Controller
             );
         }
 
-        return view('customer.cars.show', compact('car', 'availabilityCalendar', 'bookedDates', 'priceCalculation'));
+        // Ambil semua promo aktif (bisa tambahkan where jika hanya ingin yang masih berlaku)
+        $promos = Promo::all();
+
+        return view('customer.cars.show', compact('car', 'availabilityCalendar', 'bookedDates', 'priceCalculation', 'promos'));
     }
 
     public function showPopularCars()
@@ -101,16 +106,33 @@ class CarController extends Controller
             'car_id' => 'required|exists:cars,id',
             'start_date' => 'required|date|after_or_equal:today',
             'end_date' => 'required|date|after:start_date',
+            'promo_code' => 'nullable|string|exists:promos,code', // Tambah validasi promo_code
         ]);
 
         try {
-            $calculation = $this->searchService->calculateRentalPrice(
-                $request->car_id,
-                $request->start_date,
-                $request->end_date
-            );
+            $car = Car::findOrFail($request->car_id);
 
-            // Check availability
+            $start = Carbon::parse($request->start_date);
+            $end = Carbon::parse($request->end_date);
+            $days = $start->diffInDays($end);
+
+            $pricePerDay = $car->price_per_day;
+            $subtotal = $days * $pricePerDay;
+
+            $discount = 0;
+
+            // Cek promo berdasarkan code yang dipilih user (jika ada)
+            if ($request->filled('promo_code')) {
+                $promo = Promo::where('code', $request->promo_code)->first();
+                if ($promo) {
+                    $discount = ($subtotal * $promo->discount_pct) / 100;
+                }
+            }
+
+            $afterDiscount = $subtotal - $discount;
+            $tax = $afterDiscount * 0.10;
+            $total = $afterDiscount + $tax;
+
             $isAvailable = $this->availabilityService->isDateRangeAvailable(
                 $request->car_id,
                 $request->start_date,
@@ -119,16 +141,25 @@ class CarController extends Controller
 
             return response()->json([
                 'success' => true,
-                'calculation' => $calculation,
-                'available' => $isAvailable
+                'available' => $isAvailable,
+                'calculation' => [
+                    'days' => $days,
+                    'price_per_day' => $pricePerDay,
+                    'subtotal' => $subtotal,
+                    'discount' => $discount,
+                    'tax' => $tax,
+                    'total' => $total,
+                ]
             ]);
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
-                'message' => 'Terjadi kesalahan dalam perhitungan harga.'
+                'message' => 'Terjadi kesalahan dalam perhitungan harga.',
+                'error' => $e->getMessage()
             ], 400);
         }
     }
+
 
     /**
      * Get filter options for search form

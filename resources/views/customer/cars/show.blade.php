@@ -4,7 +4,8 @@
             <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
                 <i class="fas fa-car mr-2"></i>{{ $car->brand }} {{ $car->model }}
             </h2>
-            <a href="{{ route('customer.cars.index') }}" class="bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded-lg font-medium transition duration-200 flex items-center">
+            <a href="{{ route('customer.cars.index') }}"
+                class="bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded-lg font-medium transition duration-200 flex items-center">
                 <i class="fas fa-arrow-left mr-2"></i>Kembali
             </a>
         </div>
@@ -17,18 +18,21 @@
                 <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-xl sm:rounded-lg">
                     <div class="p-6">
                         <!-- Car Image -->
-                        <div class="h-64 bg-gradient-to-r from-blue-400 to-blue-600 rounded-lg flex items-center justify-center mb-6 relative">
-                            @if($car->image_url)
-                                <img src="{{ Storage::url($car->image_url) }}" 
-                                     alt="{{ $car->brand }} {{ $car->model }}"
-                                     class="w-full h-full object-cover rounded-lg">
+                        <div
+                            class="h-64 bg-gradient-to-r from-blue-400 to-blue-600 rounded-lg flex items-center justify-center mb-6 relative">
+                            @if ($car->image_url)
+                                <img src="{{ Storage::url($car->image_url) }}"
+                                    alt="{{ $car->brand }} {{ $car->model }}"
+                                    class="w-full h-full object-cover rounded-lg">
                             @else
-                                <span class="text-white text-2xl font-bold">{{ $car->brand }} {{ $car->model }}</span>
+                                <span class="text-white text-2xl font-bold">{{ $car->brand }}
+                                    {{ $car->model }}</span>
                             @endif
-                            
+
                             <!-- Availability Badge -->
                             <div class="absolute top-3 right-3">
-                                <span class="bg-green-500 text-white px-3 py-1 rounded-full text-sm font-medium shadow-lg">
+                                <span
+                                    class="bg-green-500 text-white px-3 py-1 rounded-full text-sm font-medium shadow-lg">
                                     <i class="fas fa-check-circle mr-1"></i>Tersedia
                                 </span>
                             </div>
@@ -39,7 +43,7 @@
                             <h3 class="text-2xl font-bold text-gray-900 dark:text-white">
                                 {{ $car->brand }} {{ $car->model }}
                             </h3>
-                            
+
                             <div class="grid grid-cols-2 gap-4 text-sm">
                                 <div class="bg-gray-50 dark:bg-gray-700 p-3 rounded-lg">
                                     <span class="text-gray-600 dark:text-gray-300 flex items-center">
@@ -51,19 +55,22 @@
                                     <span class="text-gray-600 dark:text-gray-300 flex items-center">
                                         <i class="fas fa-cogs mr-2"></i>Transmisi
                                     </span>
-                                    <p class="font-semibold text-gray-900 dark:text-white">{{ ucfirst($car->transmission) }}</p>
+                                    <p class="font-semibold text-gray-900 dark:text-white">
+                                        {{ ucfirst($car->transmission) }}</p>
                                 </div>
                                 <div class="bg-gray-50 dark:bg-gray-700 p-3 rounded-lg">
                                     <span class="text-gray-600 dark:text-gray-300 flex items-center">
                                         <i class="fas fa-users mr-2"></i>Kapasitas
                                     </span>
-                                    <p class="font-semibold text-gray-900 dark:text-white">{{ $car->capacity }} orang</p>
+                                    <p class="font-semibold text-gray-900 dark:text-white">{{ $car->capacity }} orang
+                                    </p>
                                 </div>
                                 <div class="bg-gray-50 dark:bg-gray-700 p-3 rounded-lg">
                                     <span class="text-gray-600 dark:text-gray-300 flex items-center">
                                         <i class="fas fa-gas-pump mr-2"></i>Bahan Bakar
                                     </span>
-                                    <p class="font-semibold text-gray-900 dark:text-white">{{ ucfirst($car->fuel_type) }}</p>
+                                    <p class="font-semibold text-gray-900 dark:text-white">
+                                        {{ ucfirst($car->fuel_type) }}</p>
                                 </div>
                             </div>
 
@@ -79,7 +86,7 @@
                             </div>
 
                             <!-- Description -->
-                            @if($car->description)
+                            @if ($car->description)
                                 <div class="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
                                     <h4 class="font-semibold text-gray-900 dark:text-white mb-2 flex items-center">
                                         <i class="fas fa-info-circle mr-2"></i>Deskripsi
@@ -97,7 +104,7 @@
                         <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-6 flex items-center">
                             <i class="fas fa-calendar-plus mr-2"></i>Pesan Mobil Ini
                         </h3>
-                        
+
                         <!-- Calendar Legend -->
                         <div class="mb-6 p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
                             <h4 class="font-medium text-gray-900 dark:text-white mb-3">Keterangan:</h4>
@@ -116,22 +123,21 @@
                                 </div>
                             </div>
                         </div>
-                        
+
                         <form action="{{ route('customer.bookings.store') }}" method="POST" id="bookingForm">
                             @csrf
                             <input type="hidden" name="car_id" value="{{ $car->id }}">
-                            
+
                             <div class="space-y-4">
                                 <!-- Start Date -->
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                                         <i class="fas fa-calendar-alt mr-2"></i>Tanggal Mulai *
                                     </label>
-                                    <input type="date" name="start_date" id="start_date" 
-                                           min="{{ date('Y-m-d') }}" 
-                                           value="{{ request('start_date') }}"
-                                           class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg dark:bg-gray-700 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500" 
-                                           required>
+                                    <input type="date" name="start_date" id="start_date" min="{{ date('Y-m-d') }}"
+                                        value="{{ request('start_date') }}"
+                                        class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg dark:bg-gray-700 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                                        required>
                                     <p class="text-xs text-gray-500 mt-1">Pilih tanggal mulai sewa</p>
                                 </div>
 
@@ -140,11 +146,11 @@
                                     <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                                         <i class="fas fa-calendar-check mr-2"></i>Tanggal Selesai *
                                     </label>
-                                    <input type="date" name="end_date" id="end_date" 
-                                           min="{{ date('Y-m-d', strtotime('+1 day')) }}" 
-                                           value="{{ request('end_date') }}"
-                                           class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg dark:bg-gray-700 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500" 
-                                           required>
+                                    <input type="date" name="end_date" id="end_date"
+                                        min="{{ date('Y-m-d', strtotime('+1 day')) }}"
+                                        value="{{ request('end_date') }}"
+                                        class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg dark:bg-gray-700 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                                        required>
                                     <p class="text-xs text-gray-500 mt-1">Pilih tanggal selesai sewa</p>
                                 </div>
 
@@ -161,10 +167,27 @@
                                     <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                                         <i class="fas fa-sticky-note mr-2"></i>Catatan (Opsional)
                                     </label>
-                                    <textarea name="notes" rows="3" 
-                                              placeholder="Tambahkan catatan khusus untuk pemesanan Anda..."
-                                              class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg dark:bg-gray-700 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500"></textarea>
+                                    <textarea name="notes" rows="3" placeholder="Tambahkan catatan khusus untuk pemesanan Anda..."
+                                        class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg dark:bg-gray-700 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500"></textarea>
                                 </div>
+
+                                {{-- Pilih Promo --}}
+                                @if ($promos->count())
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                            <i class="fas fa-tag mr-2"></i>Pilih Promo (opsional)
+                                        </label>
+                                        <select id="promoSelect" name="promo_code"
+                                            class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg dark:bg-gray-700 dark:text-white focus:ring-2 focus:ring-blue-500">
+                                            <option value="">-- Tidak pakai promo --</option>
+                                            @foreach ($promos as $promo)
+                                                <option value="{{ $promo->code }}">
+                                                    {{ $promo->code }} — {{ $promo->discount_pct }}% off
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                @endif
 
                                 <!-- Price Calculation -->
                                 <div id="priceCalculation" class="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg hidden">
@@ -174,19 +197,28 @@
                                     <div class="space-y-2 text-sm">
                                         <div class="flex justify-between">
                                             <span class="text-gray-600 dark:text-gray-300">Durasi sewa</span>
-                                            <span id="duration" class="font-medium text-gray-900 dark:text-white">-</span>
+                                            <span id="duration"
+                                                class="font-medium text-gray-900 dark:text-white">-</span>
                                         </div>
                                         <div class="flex justify-between">
                                             <span class="text-gray-600 dark:text-gray-300">Harga per hari</span>
-                                            <span id="pricePerDay" class="font-medium text-gray-900 dark:text-white">-</span>
+                                            <span id="pricePerDay"
+                                                class="font-medium text-gray-900 dark:text-white">-</span>
                                         </div>
                                         <div class="flex justify-between">
                                             <span class="text-gray-600 dark:text-gray-300">Subtotal</span>
-                                            <span id="subtotal" class="font-medium text-gray-900 dark:text-white">-</span>
+                                            <span id="subtotal"
+                                                class="font-medium text-gray-900 dark:text-white">-</span>
+                                        </div>
+                                        <div class="flex justify-between">
+                                            <span class="text-gray-600 dark:text-gray-300">Diskon Promo</span>
+                                            <span id="discount"
+                                                class="font-medium text-green-600 dark:text-green-400">-</span>
                                         </div>
                                         <div class="flex justify-between">
                                             <span class="text-gray-600 dark:text-gray-300">Pajak (10%)</span>
-                                            <span id="tax" class="font-medium text-gray-900 dark:text-white">-</span>
+                                            <span id="tax"
+                                                class="font-medium text-gray-900 dark:text-white">-</span>
                                         </div>
                                         <hr class="border-gray-300 dark:border-gray-600">
                                         <div class="flex justify-between text-lg font-bold">
@@ -198,18 +230,22 @@
 
                                 <!-- Availability Status -->
                                 <div id="availabilityStatus" class="hidden">
-                                    <div id="availableMessage" class="bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-lg hidden">
-                                        <i class="fas fa-check-circle mr-2"></i>Mobil tersedia untuk tanggal yang dipilih
+                                    <div id="availableMessage"
+                                        class="bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-lg hidden">
+                                        <i class="fas fa-check-circle mr-2"></i>Mobil tersedia untuk tanggal yang
+                                        dipilih
                                     </div>
-                                    <div id="unavailableMessage" class="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg hidden">
-                                        <i class="fas fa-times-circle mr-2"></i>Mobil tidak tersedia untuk tanggal yang dipilih
+                                    <div id="unavailableMessage"
+                                        class="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg hidden">
+                                        <i class="fas fa-times-circle mr-2"></i>Mobil tidak tersedia untuk tanggal yang
+                                        dipilih
                                     </div>
                                 </div>
 
                                 <!-- Submit Button -->
-                                <button type="submit" id="submitButton" 
-                                        class="w-full bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium transition-all duration-200 disabled:bg-gray-400 disabled:cursor-not-allowed flex items-center justify-center"
-                                        disabled>
+                                <button type="submit" id="submitButton"
+                                    class="w-full bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium transition-all duration-200 disabled:bg-gray-400 disabled:cursor-not-allowed flex items-center justify-center"
+                                    disabled>
                                     <i class="fas fa-calendar-plus mr-2"></i>
                                     <span id="submitText">Pesan Sekarang</span>
                                     <div class="ml-2 hidden" id="submitLoader">
@@ -227,7 +263,9 @@
     <!-- Pass data to JavaScript -->
     <script>
         // Pass booked dates and availability calendar to JavaScript
-        const bookedDates = @json(array_keys(array_filter($availabilityCalendar, function($available) { return !$available; })));
+        const bookedDates = @json(array_keys(array_filter($availabilityCalendar, function ($available) {
+                    return !$available;
+                })));
         const availabilityCalendar = @json($availabilityCalendar);
         const carId = {{ $car->id }};
     </script>
@@ -244,6 +282,7 @@
             const availabilityStatus = document.getElementById('availabilityStatus');
             const dateValidationMessage = document.getElementById('dateValidationMessage');
             const validationText = document.getElementById('validationText');
+            const promoSelect = document.getElementById('promoSelect');
 
             // Disable booked dates in date inputs
             function restrictBookedDates() {
@@ -262,14 +301,16 @@
                 if (!selectedDate) return;
 
                 const isBooked = bookedDates.includes(selectedDate);
-                
+
                 if (isBooked) {
                     dateValidationMessage.classList.remove('hidden');
                     if (type === 'start') {
-                        validationText.textContent = 'Tanggal mulai yang dipilih tidak tersedia. Silakan pilih tanggal lain.';
+                        validationText.textContent =
+                            'Tanggal mulai yang dipilih tidak tersedia. Silakan pilih tanggal lain.';
                         startDateInput.value = '';
                     } else {
-                        validationText.textContent = 'Tanggal selesai yang dipilih tidak tersedia. Silakan pilih tanggal lain.';
+                        validationText.textContent =
+                            'Tanggal selesai yang dipilih tidak tersedia. Silakan pilih tanggal lain.';
                         endDateInput.value = '';
                     }
                     submitButton.disabled = true;
@@ -284,7 +325,7 @@
             function isDateRangeAvailable(startDate, endDate) {
                 const start = new Date(startDate);
                 const end = new Date(endDate);
-                
+
                 for (let date = new Date(start); date <= end; date.setDate(date.getDate() + 1)) {
                     const dateStr = date.toISOString().split('T')[0];
                     if (bookedDates.includes(dateStr)) {
@@ -329,7 +370,8 @@
                 // Check if date range is available
                 if (!isDateRangeAvailable(startDate, endDate)) {
                     dateValidationMessage.classList.remove('hidden');
-                    validationText.textContent = 'Terdapat tanggal yang tidak tersedia dalam rentang waktu yang dipilih. Silakan pilih rentang waktu lain.';
+                    validationText.textContent =
+                        'Terdapat tanggal yang tidak tersedia dalam rentang waktu yang dipilih. Silakan pilih rentang waktu lain.';
                     return;
                 }
 
@@ -341,69 +383,77 @@
                 submitLoader.classList.remove('hidden');
 
                 // Fetch price calculation
-                fetch('{{ route("customer.cars.calculate-price") }}', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRF-TOKEN': '{{ csrf_token() }}',
-                        'Accept': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        car_id: carId,
-                        start_date: startDate,
-                        end_date: endDate
+                fetch('{{ route('customer.cars.calculate-price') }}', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                            'Accept': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            car_id: carId,
+                            start_date: startDate,
+                            end_date: endDate,
+                            promo_code: promoSelect?.value || null
+                        })
                     })
-                })
-                .then(response => response.json())
-                .then(data => {
-                    submitLoader.classList.add('hidden');
-                    
-                    if (data.success) {
-                        // Update price calculation
-                        document.getElementById('duration').textContent = data.calculation.days + ' hari';
-                        document.getElementById('pricePerDay').textContent = 'Rp ' + new Intl.NumberFormat('id-ID').format(data.calculation.price_per_day);
-                        document.getElementById('subtotal').textContent = 'Rp ' + new Intl.NumberFormat('id-ID').format(data.calculation.subtotal);
-                        document.getElementById('tax').textContent = 'Rp ' + new Intl.NumberFormat('id-ID').format(data.calculation.tax);
-                        document.getElementById('total').textContent = 'Rp ' + new Intl.NumberFormat('id-ID').format(data.calculation.total);
-                        
-                        priceCalculation.classList.remove('hidden');
+                    .then(response => response.json())
+                    .then(data => {
+                        submitLoader.classList.add('hidden');
 
-                        // Update availability
-                        const availableMessage = document.getElementById('availableMessage');
-                        const unavailableMessage = document.getElementById('unavailableMessage');
-                        
-                        if (data.available) {
-                            availableMessage.classList.remove('hidden');
-                            unavailableMessage.classList.add('hidden');
-                            submitButton.disabled = false;
-                            submitText.textContent = 'Pesan Sekarang';
+                        if (data.success) {
+                            // Update price calculation
+                            document.getElementById('duration').textContent = data.calculation.days + ' hari';
+                            document.getElementById('pricePerDay').textContent = 'Rp ' + new Intl.NumberFormat(
+                                'id-ID').format(data.calculation.price_per_day);
+                            document.getElementById('subtotal').textContent = 'Rp ' + new Intl.NumberFormat(
+                                'id-ID').format(data.calculation.subtotal);
+                            document.getElementById('discount').textContent = '-Rp ' + new Intl.NumberFormat(
+                                'id-ID').format(data.calculation.discount);
+                            document.getElementById('tax').textContent = 'Rp ' + new Intl.NumberFormat('id-ID')
+                                .format(data.calculation.tax);
+                            document.getElementById('total').textContent = 'Rp ' + new Intl.NumberFormat(
+                                'id-ID').format(data.calculation.total);
+
+                            priceCalculation.classList.remove('hidden');
+
+                            // Update availability
+                            const availableMessage = document.getElementById('availableMessage');
+                            const unavailableMessage = document.getElementById('unavailableMessage');
+
+                            if (data.available) {
+                                availableMessage.classList.remove('hidden');
+                                unavailableMessage.classList.add('hidden');
+                                submitButton.disabled = false;
+                                submitText.textContent = 'Pesan Sekarang';
+                            } else {
+                                availableMessage.classList.add('hidden');
+                                unavailableMessage.classList.remove('hidden');
+                                submitButton.disabled = true;
+                                submitText.textContent = 'Tidak Tersedia';
+                            }
+
+                            availabilityStatus.classList.remove('hidden');
                         } else {
-                            availableMessage.classList.add('hidden');
-                            unavailableMessage.classList.remove('hidden');
-                            submitButton.disabled = true;
-                            submitText.textContent = 'Tidak Tersedia';
+                            submitText.textContent = 'Pesan Sekarang';
+                            alert('Terjadi kesalahan dalam perhitungan harga');
                         }
-                        
-                        availabilityStatus.classList.remove('hidden');
-                    } else {
+                    })
+                    .catch(error => {
+                        submitLoader.classList.add('hidden');
                         submitText.textContent = 'Pesan Sekarang';
+                        console.error('Error:', error);
                         alert('Terjadi kesalahan dalam perhitungan harga');
-                    }
-                })
-                .catch(error => {
-                    submitLoader.classList.add('hidden');
-                    submitText.textContent = 'Pesan Sekarang';
-                    console.error('Error:', error);
-                    alert('Terjadi kesalahan dalam perhitungan harga');
-                });
+                    });
             }
 
             // Initialize
             restrictBookedDates();
-            
+
             // Event listeners
             startDateInput.addEventListener('change', updatePriceAndAvailability);
             endDateInput.addEventListener('change', updatePriceAndAvailability);
+            promoSelect?.addEventListener('change', updatePriceAndAvailability);
 
             // Initial calculation if dates are pre-filled
             if (startDateInput.value && endDateInput.value) {
@@ -418,6 +468,8 @@
             });
         });
     </script>
+
+
 
     <!-- Font Awesome for icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
