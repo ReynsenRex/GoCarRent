@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <div class="flex justify-between items-center">
-            <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
+            <h2 class="font-semibold text-xl text-black leading-tight">
                 {{ __('In Progress Bookings') }}
             </h2>
 
@@ -47,14 +47,8 @@
                 <div class="p-6 text-gray-900 dark:text-gray-100">
                     <div class="flex justify-between items-center mb-6">
                         <h3 class="text-lg font-semibold">In Progress Bookings Management</h3>
-                        <div class="flex items-center space-x-4">
-                            <a href="{{ route('admin.bookings.index') }}" 
-                                class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium transition duration-200">
-                                View All Bookings
-                            </a>
-                            <div class="text-sm text-gray-600 dark:text-gray-400">
-                                Total: {{ $bookings->total() }} bookings
-                            </div>
+                        <div class="text-sm text-gray-600 dark:text-gray-400">
+                            Total: {{ $bookings->total() }} bookings
                         </div>
                     </div>
 

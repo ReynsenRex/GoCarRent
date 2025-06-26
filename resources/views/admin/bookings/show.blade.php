@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <div class="flex justify-between items-center">
-            <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
+            <h2 class="font-semibold text-xl text-black leading-tight">
                 {{ __('Booking Details') }} - #{{ str_pad($booking->id, 4, '0', STR_PAD_LEFT) }}
             </h2>
 
