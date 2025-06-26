@@ -67,7 +67,6 @@ Route::get('/admin/promos/create', [PromoController::class, 'create'])->name('ad
 // Simpan promo baru
 Route::get('/promos', [PromoController::class, 'index'])->name('promos.index');
 Route::post('/admin/promos', [PromoController::class, 'store'])->name('admin.promos.store');
-Route::post('/promos', [PromoController::class, 'store'])->name('admin.promos.store');
 Route::get('/promos/{promo}/edit', [PromoController::class, 'edit'])->name('admin.promos.edit');
 Route::put('/promos/{promo}', [PromoController::class, 'update'])->name('admin.promos.update');
 Route::delete('/promos/{promo}', [PromoController::class, 'destroy'])->name('admin.promos.destroy');

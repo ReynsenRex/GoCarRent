@@ -55,6 +55,22 @@ class Booking extends Model
         return $this->hasOne(Payment::class);
     }
 
+    /**
+     * Get the penalties associated with the booking.
+     */
+    public function penalties()
+    {
+        return $this->hasMany(Penalty::class);
+    }
+
+    /**
+     * Get the latest penalty associated with the booking.
+     */
+    public function penalty()
+    {
+        return $this->hasOne(Penalty::class)->latest();
+    }
+
     // Helper methods
     public function canBeCancelled(): bool
     {

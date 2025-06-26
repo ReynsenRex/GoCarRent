@@ -14,7 +14,41 @@
         </div>
     </x-slot>
 
-    <div class="py-12">
+    <div class="py-6">
+        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+            <!-- Breadcrumb -->
+            <nav class="flex mb-4" aria-label="Breadcrumb">
+                <ol class="inline-flex items-center space-x-1 md:space-x-3">
+                    <li class="inline-flex items-center">
+                        <a href="{{ route('admin.dashboard') }}" class="inline-flex items-center text-sm font-medium text-gray-700 hover:text-blue-600 dark:text-gray-400 dark:hover:text-white">
+                            <svg class="w-3 h-3 mr-2.5" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="m19.707 9.293-2-2-7-7a1 1 0 0 0-1.414 0l-7 7-2 2a1 1 0 0 0 1.414 1.414L2 10.414V18a2 2 0 0 0 2 2h3a1 1 0 0 0 1-1v-4a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v4a1 1 0 0 0 1 1h3a2 2 0 0 0 2-2v-7.586l.293.293a1 1 0 0 0 1.414-1.414Z"/>
+                            </svg>
+                            Dashboard
+                        </a>
+                    </li>
+                    <li>
+                        <div class="flex items-center">
+                            <svg class="w-3 h-3 text-gray-400 mx-1" fill="none" viewBox="0 0 6 10">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 9 4-4-4-4"/>
+                            </svg>
+                            <a href="{{ route('admin.bookings.index') }}" class="ml-1 text-sm font-medium text-gray-700 hover:text-blue-600 md:ml-2 dark:text-gray-400 dark:hover:text-white">Bookings</a>
+                        </div>
+                    </li>
+                    <li aria-current="page">
+                        <div class="flex items-center">
+                            <svg class="w-3 h-3 text-gray-400 mx-1" fill="none" viewBox="0 0 6 10">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 9 4-4-4-4"/>
+                            </svg>
+                            <span class="ml-1 text-sm font-medium text-gray-500 md:ml-2 dark:text-gray-400">Booking #{{ str_pad($booking->id, 4, '0', STR_PAD_LEFT) }}</span>
+                        </div>
+                    </li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+
+    <div class="py-6">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
             <!-- Booking Status Card -->
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
@@ -233,6 +267,44 @@
                     <div class="p-6 text-gray-900 dark:text-gray-100">
                         <h3 class="text-lg font-semibold mb-4">Notes</h3>
                         <p class="text-gray-700 dark:text-gray-300">{{ $booking->notes }}</p>
+                    </div>
+                </div>
+            @endif
+
+            <!-- Penalty Information -->
+            @if($booking->penalty)
+                <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
+                    <div class="p-6 text-gray-900 dark:text-gray-100">
+                        <h3 class="text-lg font-semibold mb-4">Penalty Information</h3>
+                        <div class="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-4">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <span class="font-medium text-red-800 dark:text-red-200">Reason:</span>
+                                    <p class="text-red-700 dark:text-red-300">{{ $booking->penalty->reason }}</p>
+                                </div>
+                                <div>
+                                    <span class="font-medium text-red-800 dark:text-red-200">Days Late:</span>
+                                    <p class="text-red-700 dark:text-red-300">{{ $booking->penalty->days_late }} days</p>
+                                </div>
+                                <div>
+                                    <span class="font-medium text-red-800 dark:text-red-200">Fine Amount:</span>
+                                    <p class="text-red-700 dark:text-red-300">Rp {{ number_format($booking->penalty->fine_amount, 0, ',', '.') }}</p>
+                                </div>
+                                <div>
+                                    <span class="font-medium text-red-800 dark:text-red-200">Payment Status:</span>
+                                    <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full 
+                                        {{ $booking->penalty->isPaid() ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300' : 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300' }}">
+                                        {{ ucfirst($booking->penalty->paid_status) }}
+                                    </span>
+                                </div>
+                                @if($booking->penalty->paid_at)
+                                    <div class="md:col-span-2">
+                                        <span class="font-medium text-red-800 dark:text-red-200">Paid At:</span>
+                                        <p class="text-red-700 dark:text-red-300">{{ $booking->penalty->paid_at->format('M d, Y H:i') }}</p>
+                                    </div>
+                                @endif
+                            </div>
+                        </div>
                     </div>
                 </div>
             @endif
