@@ -77,8 +77,6 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(fun
     // Standard resource routes
     Route::resource('bookings', BookingController::class);
 
-    Route::get('/bookings', [BookingController::class, 'index'])->name('bookings.index');
-
     // Additional booking management routes
     Route::patch('bookings/{booking}/approve', [BookingController::class, 'approve'])
         ->name('bookings.approve');
