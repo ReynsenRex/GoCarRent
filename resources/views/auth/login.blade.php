@@ -109,8 +109,6 @@
                 <div class="space-y-1 text-xs text-gray-600">
                     <p><strong>Admin:</strong> admin@gocarrent.com / password123</p>
                     <p><strong>Customer:</strong> customer@gocarrent.com / password123</p>
-                    <p><strong>Staff:</strong> staff@gocarrent.com / password123</p>
-                </div>
             </div>
         </div>
         

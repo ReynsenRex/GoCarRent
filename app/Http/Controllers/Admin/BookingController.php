@@ -220,9 +220,9 @@ class BookingController extends Controller
     {
         $booking = Booking::findOrFail($id);
         
-        if ($booking->status !== 'approved') {
+        if ($booking->status !== 'in_progress') {
             return redirect()->back()
-                ->with('error', 'Pemesanan tidak dapat diselesaikan karena status bukan approved');
+                ->with('error', 'Pemesanan tidak dapat diselesaikan karena status bukan in_progress');
         }
 
         DB::transaction(function () use ($booking) {
