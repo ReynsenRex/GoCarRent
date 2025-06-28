@@ -287,21 +287,6 @@
                                                             </button>
                                                         </form>
                                                     @endif
-
-                                                    @if (in_array($booking->status, ['pending', 'approved']))
-                                                        <!-- Cancel Button -->
-                                                        <form method="POST"
-                                                            action="{{ route('admin.bookings.cancel', $booking) }}"
-                                                            onsubmit="return confirm('Are you sure you want to cancel this booking?')"
-                                                            class="inline">
-                                                            @csrf
-                                                            @method('PATCH')
-                                                            <button type="submit"
-                                                                class="inline-flex items-center px-2 py-1 bg-gray-100 hover:bg-gray-200 text-gray-800 text-xs font-medium rounded transition duration-200 dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600">
-                                                                ✗ Cancel
-                                                            </button>
-                                                        </form>
-                                                    @endif
                                                 </div>
                                             </td>
                                         </tr>

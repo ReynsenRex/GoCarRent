@@ -160,7 +160,7 @@
                                     <option value="">Select Status</option>
                                     <option value="available" {{ $car->availability_status == 'available' ? 'selected' : '' }}>✅ Available</option>
                                     <option value="rented" {{ $car->availability_status == 'rented' ? 'selected' : '' }}>❌ Rented</option>
-                                    <option value="maintenance" {{ $car->availability_status == 'maintenance' ? 'selected' : '' }}>❌ Maintenance</option>
+                                    <option value="maintenance" {{ $car->availability_status == 'maintenance' ? 'selected' : '' }}>⚠️ Maintenance</option>
                                 </select>
                             </div>
 
